@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-03-19 07:55:02",
+  "experiments": [
+    {
+      "name": "缓存穿透",
+      "scenarios": [
+        {
+          "name": "无保护",
+          "db_hits": 1000,
+          "duration_ms": 5530,
+          "request_count": 1000
+        },
+        {
+          "name": "缓存空值_首轮",
+          "db_hits": 1000,
+          "duration_ms": 5644,
+          "request_count": 1000
+        },
+        {
+          "name": "缓存空值_二轮",
+          "db_hits": 0,
+          "duration_ms": 76,
+          "request_count": 1000
+        },
+        {
+          "name": "布隆过滤器",
+          "db_hits": 0,
+          "duration_ms": 0,
+          "request_count": 1000,
+          "extra": "bloom_rejected=1000"
+        }
+      ]
+    },
+    {
+      "name": "缓存击穿",
+      "scenarios": [
+        {
+          "name": "无保护",
+          "db_hits": 200,
+          "duration_ms": 72,
+          "request_count": 200
+        },
+        {
+          "name": "singleflight",
+          "db_hits": 1,
+          "duration_ms": 50,
+          "request_count": 200
+        },
+        {
+          "name": "朴素分布式锁",
+          "db_hits": 1,
+          "duration_ms": 59,
+          "request_count": 200
+        },
+        {
+          "name": "安全分布式锁",
+          "db_hits": 1,
+          "duration_ms": 60,
+          "request_count": 200
+        }
+      ]
+    },
+    {
+      "name": "缓存雪崩",
+      "scenarios": [
+        {
+          "name": "相同TTL",
+          "db_hits": 200,
+          "duration_ms": 15,
+          "request_count": 200
+        },
+        {
+          "name": "随机TTL",
+          "db_hits": 100,
+          "duration_ms": 14,
+          "request_count": 200
+        },
+        {
+          "name": "多级缓存",
+          "db_hits": 0,
+          "duration_ms": 0,
+          "request_count": 200,
+          "extra": "l1_hits=200"
+        }
+      ]
+    }
+  ]
+}
