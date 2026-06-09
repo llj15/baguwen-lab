@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "lab": "redis-big-hot-key",
+  "seed": 20260609,
+  "generated_at": "2026-06-09T13:26:17Z",
+  "dataset": {
+    "normal_string_count": 20000,
+    "normal_value_bytes": 128,
+    "big_string_bytes": 8388608,
+    "big_hash_fields": 50000,
+    "big_hash_buckets": 100,
+    "big_list_items": 50000,
+    "big_element_bytes": 64,
+    "hot_keyspace": 10000,
+    "hot_requests": 100000,
+    "hot_ratio_percent": 60,
+    "hot_shards": 16
+  },
+  "experiments": [
+    {
+      "name": "redis_big_key",
+      "scenarios": [
+        {
+          "name": "representative_dataset",
+          "metrics": {
+            "normal_avg_memory": 224,
+            "normal_string_count": 20000,
+            "normal_value_bytes": 128,
+            "normal_write_ms": 230
+          }
+        },
+        {
+          "name": "big_string",
+          "metrics": {
+            "key": "big:string:8m",
+            "logical_bytes": 8388608,
+            "memory_bytes": 10485816,
+            "memory_vs_normal": 46811.67857142857,
+            "strlen": 8388608,
+            "write_ms": 18
+          }
+        },
+        {
+          "name": "big_hash",
+          "metrics": {
+            "element_bytes": 64,
+            "fields": 50000,
+            "key": "big:hash:50k",
+            "memory_bytes": 6786544,
+            "memory_vs_normal": 30297.071428571428,
+            "write_ms": 458
+          }
+        },
+        {
+          "name": "big_list",
+          "metrics": {
+            "element_bytes": 64,
+            "items": 50000,
+            "key": "big:list:50k",
+            "memory_bytes": 3679800,
+            "memory_vs_normal": 16427.678571428572,
+            "write_ms": 135
+          }
+        },
+        {
+          "name": "split_hash_mitigation",
+          "metrics": {
+            "bucket_count": 100,
+            "max_bucket_fields": 500,
+            "min_bucket_fields": 500,
+            "total_fields": 50000,
+            "write_ms": 936
+          }
+        },
+        {
+          "name": "hash_full_read_vs_scan",
+          "metrics": {
+            "hgetall_fields": 50000,
+            "hgetall_ms": 132,
+            "hscan_count": 500,
+            "hscan_fields": 50000,
+            "hscan_iterations": 100,
+            "hscan_ms": 172
+          }
+        }
+      ]
+    },
+    {
+      "name": "redis_hot_key",
+      "scenarios": [
+        {
+          "name": "representative_dataset",
+          "metrics": {
+            "hot_ratio_percent": 60,
+            "hot_shards": 16,
+            "keyspace": 10000,
+            "requests": 100000,
+            "setup_ms": 73
+          }
+        },
+        {
+          "name": "uniform_access",
+          "metrics": {
+            "elapsed_ms": 579,
+            "requests": 100000,
+            "top_count": 23,
+            "top_key": "item:7732",
+            "top_ratio": 0.00023,
+            "unique_keys": 9999
+          }
+        },
+        {
+          "name": "single_hot_key_access",
+          "metrics": {
+            "elapsed_ms": 545,
+            "requests": 100000,
+            "top_count": 60000,
+            "top_key": "item:0000",
+            "top_ratio": 0.6,
+            "unique_keys": 9838
+          }
+        },
+        {
+          "name": "sharded_hot_key_access",
+          "metrics": {
+            "elapsed_ms": 454,
+            "hot_copy_count": 16,
+            "hot_copy_gets": 60000,
+            "max_copy_gets": 3750,
+            "requests": 100000,
+            "top_count": 3750,
+            "top_key": "item:hot:00",
+            "top_ratio": 0.0375,
+            "unique_keys": 9823
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+name: redis-big-hot-key-lab
+
+x-build-args: &build-args
+  GO_IMAGE: ${GO_IMAGE:-docker.io/library/golang:1.25.0-alpine3.22@sha256:f18a072054848d87a8077455f0ac8a25886f2397f88bfdd222d6fafbb5bba440}
+  RUNTIME_IMAGE: ${RUNTIME_IMAGE:-docker.io/library/alpine:3.22@sha256:310c62b5e7ca5b08167e4384c68db0fd2905dd9c7493756d356e893909057601}
+  PYTHON_IMAGE: ${PYTHON_IMAGE:-docker.io/library/python:3.12.11-slim-bookworm@sha256:519591d6871b7bc437060736b9f7456b8731f1499a57e22e6c285135ae657bf7}
+
+x-common: &common
+  platform: ${DOCKER_PLATFORM:-linux/amd64}
+  restart: "no"
+
+services:
+  redis:
+    <<: *common
+    image: ${REDIS_IMAGE:-docker.io/library/redis:7.4.4-alpine3.21@sha256:ee9e8748ace004102a267f7b8265dab2c618317df22507b89d16a8add7154273}
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - type: bind
+        source: ./conf/redis.conf
+        target: /usr/local/etc/redis/redis.conf
+        read_only: true
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "127.0.0.1", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  experiment:
+    <<: *common
+    image: redis-big-hot-key-lab-experiment:${IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: experiment
+      args: *build-args
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_ADDR: redis:6379
+      TZ: UTC
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      OUTPUT_DIR: /data
+    volumes:
+      - type: bind
+        source: ${RESULTS_DIR:-./results}
+        target: /data
+
+  analysis:
+    <<: *common
+    image: redis-big-hot-key-lab-analysis:${IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: analysis
+      args: *build-args
+    depends_on:
+      experiment:
+        condition: service_completed_successfully
+    environment:
+      MPLCONFIGDIR: /tmp/matplotlib
+      TZ: UTC
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      OUTPUT_DIR: /data
+    volumes:
+      - type: bind
+        source: ${RESULTS_DIR:-./results}
+        target: /data
