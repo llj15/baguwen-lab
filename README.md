@@ -18,40 +18,60 @@ Hands-on labs for learning classic backend interview topics by running reproduci
 
 ## Run A Lab
 
-Each lab owns its own runtime, scripts, and verification rules.
+Each lab owns its own Docker runtime, scripts, and verification rules. Run commands from the repository root.
 
-Redis cache failure:
+List available labs:
 
 ```bash
-cd labs/redis-cache-failure
-RESULTS_DIR=./tmp-results bash ./run.sh
+./scripts/run-lab.sh --list
 ```
 
 Windows PowerShell:
 
 ```powershell
-cd labs\redis-cache-failure
-.\run.ps1 -ResultsDir .\tmp-results
+.\scripts\run-lab.ps1 -List
 ```
 
-Redis distributed lock:
+### macOS
 
 ```bash
-cd labs/redis-distributed-lock
-RESULTS_DIR=./tmp-results bash ./run.sh
+./scripts/run-lab.sh redis-cache-failure
+./scripts/run-lab.sh redis-distributed-lock
 ```
 
-Windows PowerShell:
+Prerequisite: Docker Desktop for Mac with Compose support.
+
+### Linux
+
+```bash
+./scripts/run-lab.sh redis-cache-failure
+./scripts/run-lab.sh redis-distributed-lock
+```
+
+Prerequisite: Docker Engine with the Compose plugin. If Docker requires sudo on your machine, run with your normal Docker group setup or pass a Compose wrapper:
+
+```bash
+./scripts/run-lab.sh --compose "sudo docker compose" redis-cache-failure
+```
+
+### Windows
 
 ```powershell
-cd labs\redis-distributed-lock
-.\run.ps1 -ResultsDir .\tmp-results
+.\scripts\run-lab.ps1 redis-cache-failure
+.\scripts\run-lab.ps1 redis-distributed-lock
 ```
+
+Prerequisite: Docker Desktop for Windows with Linux containers enabled.
+
+By default, generated files go to `tmp-results/<lab>` at the repository root. Override that with `--results-dir` on macOS/Linux or `-ResultsDir` on Windows.
 
 ## Monorepo Layout
 
 ```text
 .
+|-- scripts/
+|   |-- run-lab.sh
+|   `-- run-lab.ps1
 |-- labs/
 |   |-- redis-cache-failure/
 |   |   |-- docker-compose.yml

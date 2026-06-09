@@ -5,6 +5,27 @@ on:
   push:
 
 jobs:
+  run-a-lab-entrypoints:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate macOS/Linux entrypoint
+        if: runner.os != 'Windows'
+        run: |
+          bash -n ./scripts/run-lab.sh
+          bash ./scripts/run-lab.sh --list
+
+      - name: Validate Windows entrypoint
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          .\scripts\run-lab.ps1 -List
+
   redis-cache-failure:
     runs-on: ubuntu-latest
     defaults:
