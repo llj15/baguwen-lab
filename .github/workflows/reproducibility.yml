@@ -78,3 +78,29 @@ jobs:
           test -s "${RESULTS_DIR}/01_basic_lock.png"
           test -s "${RESULTS_DIR}/02_redlock.png"
           test -s "${RESULTS_DIR}/03_watchdog.png"
+
+  redis-big-hot-key:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/redis-big-hot-key
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate compose config
+        run: docker compose config
+
+      - name: Run experiment and analysis outside tracked results
+        run: |
+          RESULTS_DIR="${RUNNER_TEMP}/redis-big-hot-key-results" bash ./run.sh
+
+      - name: Verify generated artifacts
+        run: |
+          RESULTS_DIR="${RUNNER_TEMP}/redis-big-hot-key-results"
+          python scripts/verify_results.py "${RESULTS_DIR}/results.json"
+          test -s "${RESULTS_DIR}/results.json"
+          test -s "${RESULTS_DIR}/result.md"
+          test -s "${RESULTS_DIR}/report.md"
+          test -s "${RESULTS_DIR}/big-key-memory.png"
+          test -s "${RESULTS_DIR}/hot-key-distribution.png"
+          test -s "${RESULTS_DIR}/summary.png"

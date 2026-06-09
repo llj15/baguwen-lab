@@ -1,7 +1,8 @@
 REDIS_LAB := labs/redis-cache-failure
 REDIS_LOCK_LAB := labs/redis-distributed-lock
+REDIS_BIG_HOT_KEY_LAB := labs/redis-big-hot-key
 
-.PHONY: redis-cache-failure redis-cache-failure-verify redis-distributed-lock redis-distributed-lock-verify
+.PHONY: redis-cache-failure redis-cache-failure-verify redis-distributed-lock redis-distributed-lock-verify redis-big-hot-key redis-big-hot-key-verify
 
 redis-cache-failure:
 	$(MAKE) -C $(REDIS_LAB) run RESULTS_DIR=./tmp-results
@@ -14,3 +15,9 @@ redis-distributed-lock:
 
 redis-distributed-lock-verify:
 	$(MAKE) -C $(REDIS_LOCK_LAB) verify RESULTS_DIR=./tmp-results
+
+redis-big-hot-key:
+	$(MAKE) -C $(REDIS_BIG_HOT_KEY_LAB) run RESULTS_DIR=./tmp-results
+
+redis-big-hot-key-verify:
+	$(MAKE) -C $(REDIS_BIG_HOT_KEY_LAB) verify RESULTS_DIR=./tmp-results

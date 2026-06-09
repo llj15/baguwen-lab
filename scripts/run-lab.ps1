@@ -20,11 +20,15 @@ Usage:
 Labs:
   redis-cache-failure       Cache penetration, breakdown, avalanche
   redis-distributed-lock    SET NX EX, Redlock, watchdog renewal
+  redis-big-hot-key         Big key and hot key detection/mitigation
 
 Aliases:
   cache                     redis-cache-failure
   lock                      redis-distributed-lock
   distributed-lock          redis-distributed-lock
+  big-hot                   redis-big-hot-key
+  bigkey                    redis-big-hot-key
+  hotkey                    redis-big-hot-key
 
 Options:
   -ResultsDir DIR           Output directory. Relative paths resolve from repo root.
@@ -43,6 +47,10 @@ function Resolve-LabName {
         "lock" { "redis-distributed-lock"; return }
         "distributed-lock" { "redis-distributed-lock"; return }
         "redis-distributed-lock" { "redis-distributed-lock"; return }
+        "big-hot" { "redis-big-hot-key"; return }
+        "bigkey" { "redis-big-hot-key"; return }
+        "hotkey" { "redis-big-hot-key"; return }
+        "redis-big-hot-key" { "redis-big-hot-key"; return }
         default { throw "Unknown lab: $Name" }
     }
 }
@@ -55,6 +63,7 @@ if ($Help) {
 if ($List) {
     "redis-cache-failure"
     "redis-distributed-lock"
+    "redis-big-hot-key"
     exit 0
 }
 

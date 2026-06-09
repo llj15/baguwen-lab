@@ -15,6 +15,7 @@ Hands-on labs for learning classic backend interview topics by running reproduci
 | --- | --- | --- |
 | [Redis Cache Failure](labs/redis-cache-failure/) | Cache penetration, cache breakdown, cache avalanche | Ready |
 | [Redis Distributed Lock](labs/redis-distributed-lock/) | SET NX EX, Redlock, watchdog renewal | Ready |
+| [Redis Big/Hot Key](labs/redis-big-hot-key/) | Big key detection, split mitigation, hot key skew, read-copy sharding | Ready |
 
 ## Run A Lab
 
@@ -37,6 +38,7 @@ Windows PowerShell:
 ```bash
 ./scripts/run-lab.sh redis-cache-failure
 ./scripts/run-lab.sh redis-distributed-lock
+./scripts/run-lab.sh redis-big-hot-key
 ```
 
 Prerequisite: Docker Desktop for Mac with Compose support.
@@ -46,6 +48,7 @@ Prerequisite: Docker Desktop for Mac with Compose support.
 ```bash
 ./scripts/run-lab.sh redis-cache-failure
 ./scripts/run-lab.sh redis-distributed-lock
+./scripts/run-lab.sh redis-big-hot-key
 ```
 
 Prerequisite: Docker Engine with the Compose plugin. If Docker requires sudo on your machine, run with your normal Docker group setup or pass a Compose wrapper:
@@ -59,11 +62,14 @@ Prerequisite: Docker Engine with the Compose plugin. If Docker requires sudo on 
 ```powershell
 .\scripts\run-lab.ps1 redis-cache-failure
 .\scripts\run-lab.ps1 redis-distributed-lock
+.\scripts\run-lab.ps1 redis-big-hot-key
 ```
 
 Prerequisite: Docker Desktop for Windows with Linux containers enabled.
 
 By default, generated files go to `tmp-results/<lab>` at the repository root. Override that with `--results-dir` on macOS/Linux or `-ResultsDir` on Windows.
+
+Aliases for the Redis Big/Hot Key lab: `big-hot`, `bigkey`, and `hotkey`.
 
 ## Monorepo Layout
 
@@ -74,6 +80,11 @@ By default, generated files go to `tmp-results/<lab>` at the repository root. Ov
 |   `-- run-lab.ps1
 |-- labs/
 |   |-- redis-cache-failure/
+|   |   |-- docker-compose.yml
+|   |   |-- conf/
+|   |   |-- scripts/
+|   |   `-- results/
+|   |-- redis-big-hot-key/
 |   |   |-- docker-compose.yml
 |   |   |-- conf/
 |   |   |-- scripts/
