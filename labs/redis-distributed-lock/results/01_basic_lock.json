@@ -1,0 +1,36 @@
+{
+  "results": [
+    {
+      "actual": 180,
+      "duration_ms": 134,
+      "expected": 1000,
+      "increments": 100,
+      "lost": 820,
+      "lost_pct": 82,
+      "mode": "no_lock",
+      "workers": 10
+    },
+    {
+      "actual": 1000,
+      "duration_ms": 1057,
+      "expected": 1000,
+      "increments": 100,
+      "lost": 0,
+      "lost_pct": 0,
+      "mode": "set_nx_ex",
+      "retries": 5400,
+      "workers": 10
+    },
+    {
+      "actual": 100,
+      "duration_ms": 645,
+      "expected": 100,
+      "increments": 20,
+      "lost": 0,
+      "lost_pct": 0,
+      "mode": "short_ttl",
+      "workers": 5,
+      "wrong_release": 100
+    }
+  ]
+}

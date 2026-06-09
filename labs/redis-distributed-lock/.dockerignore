@@ -1,0 +1,8 @@
+.git
+.gitignore
+tmp-results
+**/tmp-results
+results
+**/*.log
+__pycache__
+*.pyc

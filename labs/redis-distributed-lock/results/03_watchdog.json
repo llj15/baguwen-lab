@@ -1,0 +1,254 @@
+{
+  "results": [
+    {
+      "actual": 13,
+      "duration_ms": 12957,
+      "expected": 25,
+      "increments": 5,
+      "lock_ttl_ms": 500,
+      "lost": 12,
+      "lost_pct": 48,
+      "mode": "no_watchdog",
+      "violations": 25,
+      "work_time_ms": 800,
+      "workers": 5
+    },
+    {
+      "actual": 25,
+      "duration_ms": 20081,
+      "expected": 25,
+      "increments": 5,
+      "lock_ttl_ms": 500,
+      "lost": 0,
+      "lost_pct": 0,
+      "mode": "with_watchdog",
+      "renewal_interval": "ttl/3",
+      "total_renewals": 100,
+      "work_time_ms": 800,
+      "workers": 5
+    },
+    {
+      "events": [
+        {
+          "time_ms": 0,
+          "event": "lock_acquired",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 51,
+          "event": "ttl_check",
+          "ttl_ms": 249
+        },
+        {
+          "time_ms": 103,
+          "event": "ttl_check",
+          "ttl_ms": 298
+        },
+        {
+          "time_ms": 151,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 201,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 251,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 302,
+          "event": "ttl_check",
+          "ttl_ms": 200
+        },
+        {
+          "time_ms": 351,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 402,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 451,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 502,
+          "event": "ttl_check",
+          "ttl_ms": 199
+        },
+        {
+          "time_ms": 551,
+          "event": "ttl_check",
+          "ttl_ms": 251
+        },
+        {
+          "time_ms": 601,
+          "event": "ttl_check",
+          "ttl_ms": 201
+        },
+        {
+          "time_ms": 652,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 701,
+          "event": "ttl_check",
+          "ttl_ms": 200
+        },
+        {
+          "time_ms": 751,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 801,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 852,
+          "event": "ttl_check",
+          "ttl_ms": 249
+        },
+        {
+          "time_ms": 901,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 952,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1001,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1051,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1102,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1152,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1201,
+          "event": "ttl_check",
+          "ttl_ms": 299
+        },
+        {
+          "time_ms": 1251,
+          "event": "ttl_check",
+          "ttl_ms": 249
+        },
+        {
+          "time_ms": 1301,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1351,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1401,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1452,
+          "event": "ttl_check",
+          "ttl_ms": 249
+        },
+        {
+          "time_ms": 1501,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1551,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1601,
+          "event": "ttl_check",
+          "ttl_ms": 200
+        },
+        {
+          "time_ms": 1651,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1702,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1751,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1801,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 1851,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 1901,
+          "event": "ttl_check",
+          "ttl_ms": 200
+        },
+        {
+          "time_ms": 1951,
+          "event": "ttl_check",
+          "ttl_ms": 250
+        },
+        {
+          "time_ms": 2001,
+          "event": "ttl_check",
+          "ttl_ms": 300
+        },
+        {
+          "time_ms": 2003,
+          "event": "before_unlock",
+          "ttl_ms": 298
+        },
+        {
+          "time_ms": 2004,
+          "event": "unlocked",
+          "ttl_ms": 0
+        }
+      ],
+      "lock_ttl_ms": 300,
+      "mode": "watchdog_timeline",
+      "renewals": 20,
+      "work_time_ms": 2000
+    }
+  ]
+}
