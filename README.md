@@ -2,7 +2,7 @@
 
 Hands-on labs for learning classic backend interview topics by running reproducible experiments instead of memorizing answers.
 
-`baguwen` is the pinyin for 八股文. The point of this monorepo is to turn each high-frequency interview topic into a small, runnable lab with:
+`baguwen` is the pinyin for the classic interview "eight-legged essay" style. The point of this monorepo is to turn each high-frequency interview topic into a small, runnable lab with:
 
 - a focused experiment;
 - containerized, reproducible setup;
@@ -14,10 +14,13 @@ Hands-on labs for learning classic backend interview topics by running reproduci
 | Lab | Topic | Status |
 | --- | --- | --- |
 | [Redis Cache Failure](labs/redis-cache-failure/) | Cache penetration, cache breakdown, cache avalanche | Ready |
+| [Redis Distributed Lock](labs/redis-distributed-lock/) | SET NX EX, Redlock, watchdog renewal | Ready |
 
 ## Run A Lab
 
-Each lab owns its own runtime, scripts, and verification rules. For the Redis cache lab:
+Each lab owns its own runtime, scripts, and verification rules.
+
+Redis cache failure:
 
 ```bash
 cd labs/redis-cache-failure
@@ -31,19 +34,37 @@ cd labs\redis-cache-failure
 .\run.ps1 -ResultsDir .\tmp-results
 ```
 
+Redis distributed lock:
+
+```bash
+cd labs/redis-distributed-lock
+RESULTS_DIR=./tmp-results bash ./run.sh
+```
+
+Windows PowerShell:
+
+```powershell
+cd labs\redis-distributed-lock
+.\run.ps1 -ResultsDir .\tmp-results
+```
+
 ## Monorepo Layout
 
 ```text
 .
-├── labs/
-│   └── redis-cache-failure/
-│       ├── main.go
-│       ├── docker-compose.yml
-│       ├── conf/
-│       ├── scripts/
-│       └── results/
-├── .github/workflows/
-└── README.md
+|-- labs/
+|   |-- redis-cache-failure/
+|   |   |-- docker-compose.yml
+|   |   |-- conf/
+|   |   |-- scripts/
+|   |   `-- results/
+|   `-- redis-distributed-lock/
+|       |-- docker-compose.yml
+|       |-- conf/
+|       |-- scripts/
+|       `-- results/
+|-- .github/workflows/
+`-- README.md
 ```
 
 ## License

@@ -30,3 +30,30 @@ jobs:
           test -s "${RESULTS_DIR}/breakdown.png"
           test -s "${RESULTS_DIR}/avalanche.png"
           test -s "${RESULTS_DIR}/summary.png"
+
+  redis-distributed-lock:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/redis-distributed-lock
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate compose config
+        run: docker compose config
+
+      - name: Run experiment and analysis outside tracked results
+        run: |
+          RESULTS_DIR="${RUNNER_TEMP}/redis-distributed-lock-results" bash ./run.sh
+
+      - name: Verify generated artifacts
+        run: |
+          RESULTS_DIR="${RUNNER_TEMP}/redis-distributed-lock-results"
+          docker compose run --rm --no-deps analysis python /app/scripts/verify_results.py /data --baseline /baseline
+          test -s "${RESULTS_DIR}/01_basic_lock.json"
+          test -s "${RESULTS_DIR}/02_redlock.json"
+          test -s "${RESULTS_DIR}/03_watchdog.json"
+          test -s "${RESULTS_DIR}/report.md"
+          test -s "${RESULTS_DIR}/01_basic_lock.png"
+          test -s "${RESULTS_DIR}/02_redlock.png"
+          test -s "${RESULTS_DIR}/03_watchdog.png"
