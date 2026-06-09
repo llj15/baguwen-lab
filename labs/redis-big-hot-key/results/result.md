@@ -1,59 +1,59 @@
-# Redis Big Key and Hot Key Lab Result
+# Redis 大 Key 与热点 Key 实验结果
 
-This result document is generated from a real Docker Compose run. The dataset is created by the experiment program itself, written to Redis, then measured from Redis with commands such as `MEMORY USAGE`, `HLEN`, `LLEN`, `HGETALL`, `HSCAN`, and real `GET` workloads. The checked-in numbers are not hand-written fixtures.
+本文档由真实的 Docker Compose 实验运行生成。数据集由实验程序在运行时构造并写入 Redis，随后通过 `MEMORY USAGE`、`HLEN`、`LLEN`、`HGETALL`、`HSCAN` 以及真实的 `GET` 访问负载从 Redis 中测量。仓库中记录的数值不是手写夹具，也不是为了结论人为编造的数据。
 
-## Dataset
+## 数据集
 
-| Dimension | Value |
+| 维度 | 数值 |
 | --- | ---: |
-| Normal string keys | 20000 |
-| Normal string payload | 128 bytes |
-| Big string payload | 8388608 bytes |
-| Big hash fields | 50000 |
-| Big list items | 50000 |
-| Hot-key keyspace | 10000 keys |
-| Hot-key requests | 100000 |
-| Hot-key skew | 60% to one logical key |
+| 普通字符串 key 数量 | 20000 |
+| 普通字符串 value 大小 | 128 bytes |
+| 大字符串 value 大小 | 8388608 bytes |
+| 大 Hash 字段数 | 50000 |
+| 大 List 元素数 | 50000 |
+| 热点 Key 访问空间 | 10000 keys |
+| 热点 Key 请求数 | 100000 |
+| 热点 Key 倾斜比例 | 60% 请求集中到一个逻辑 key |
 
-## Big Key Results
+## 大 Key 实验结果
 
-![Big key memory](big-key-memory.png)
+![大 Key 内存占用](big-key-memory.png)
 
-| Scenario | Measurement |
+| 场景 | 测量值 |
 | --- | ---: |
-| Average normal string memory | 224 bytes |
-| Big string memory | 10485816 bytes |
-| Big string logical length | 8388608 bytes |
-| Big hash memory | 6786544 bytes |
-| Big hash field count | 50000 |
-| Big list memory | 3679800 bytes |
-| Big list item count | 50000 |
+| 普通字符串平均内存 | 224 bytes |
+| 大字符串内存 | 10485816 bytes |
+| 大字符串逻辑长度 | 8388608 bytes |
+| 大 Hash 内存 | 6786544 bytes |
+| 大 Hash 字段数 | 50000 |
+| 大 List 内存 | 3679800 bytes |
+| 大 List 元素数 | 50000 |
 
-The big string, hash, and list are all valid Redis objects, but they concentrate much more memory and command work on one key than ordinary keys. That is the core risk of a big key: not that Redis cannot store it, but that single commands and single-key ownership become too heavy.
+大字符串、大 Hash 和大 List 都是合法的 Redis 对象，但它们把远高于普通 key 的内存占用和命令处理量集中到了单个 key 上。大 Key 的核心风险不在于 Redis 不能存储它，而在于单个命令、单个 key 的所有权和迁移成本会变得过重。
 
-The full hash read returned `50000` fields in one command. The cursor scan also read `50000` fields, but split the work into `100` calls. Timings are host-dependent, but the command shape is stable: `HGETALL` creates one large response, while `HSCAN` lets the caller slice the work.
+完整读取 Hash 时，`HGETALL` 在一次命令中返回了 `50000` 个字段。游标扫描同样读取了 `50000` 个字段，但把工作拆成了 `100` 次调用。耗时会受宿主机影响，但命令形态是稳定的：`HGETALL` 会产生一次大响应，`HSCAN` 则允许调用方分片处理。
 
-The split-hash mitigation preserved all `50000` fields while reducing the largest bucket to `500` fields across `100` keys. Splitting does not reduce total data volume; it reduces maximum per-key and per-command pressure.
+Hash 拆分方案保留了全部 `50000` 个字段，并把最大 bucket 降到 `500` 个字段，数据分布在 `100` 个 key 上。拆分不会减少总数据量，但会降低单个 key 和单条命令承受的最大压力。
 
-## Hot Key Results
+## 热点 Key 实验结果
 
-![Hot key distribution](hot-key-distribution.png)
+![热点 Key 访问分布](hot-key-distribution.png)
 
-| Scenario | Top key | Top count | Top share |
+| 场景 | 访问量最高的 key | 最高访问次数 | 最高访问占比 |
 | --- | --- | ---: | ---: |
-| Uniform access | `item:7732` | 23 | 0.0002 |
-| Single hot key | `item:0000` | 60000 | 0.6000 |
-| Sharded hot key | `item:hot:00` | 3750 | 0.0375 |
+| 均匀访问 | `item:7732` | 23 | 0.0002 |
+| 单热点 key | `item:0000` | 60000 | 0.6000 |
+| 热点 key 读副本分片 | `item:hot:00` | 3750 | 0.0375 |
 
-The uniform workload spreads reads across `9999` keys, so no key dominates. The hot-key workload sends `60000` of `100000` requests to `item:0000`, proving the traffic-skew problem directly from access counts.
+均匀访问负载把读请求分散到 `9999` 个 key 上，因此没有单个 key 占据主导。热点 Key 负载把 `100000` 次请求中的 `60000` 次打到 `item:0000`，从访问计数上直接证明了流量倾斜问题。
 
-The read-copy mitigation keeps the same logical hot item but fans it out over `16` physical keys. The hottest copy receives `3750` reads instead of `60000`, reducing pressure on any one Redis key.
+读副本分片方案保持同一个逻辑热点数据不变，但把读取分散到 `16` 个物理 key 上。最热的副本收到 `3750` 次读取，而不是原始热点 key 的 `60000` 次读取，从而降低单个 Redis key 的压力。
 
-![Summary](summary.png)
+![缓解效果汇总](summary.png)
 
-## Conclusions
+## 实验结论
 
-- Big keys create large per-key memory and large per-command payloads; split structures and cursor scans reduce maximum per-command work.
-- Hot keys are a traffic distribution problem; the evidence is the top-key share, not just latency.
-- Read-copy sharding reduces Redis pressure for read hot keys. Write hot keys need separate counter sharding or aggregation patterns.
-- Durations are recorded as observations. The verifier checks stable invariants: generated data size, Redis cardinality, memory lower bounds, access distribution, and mitigation effects.
+- 大 Key 会带来更高的单 key 内存占用和更大的单命令返回载荷；结构拆分和游标扫描可以降低单条命令的最大处理量。
+- 热点 Key 本质是流量分布问题；判断依据应重点看最高访问占比，而不只是看延迟。
+- 读副本分片可以降低读热点 Key 对单个 Redis key 的压力；写热点 Key 通常还需要计数器分片、异步聚合或其他写入侧拆分方案。
+- 耗时数据只作为观察项记录。校验器检查的是稳定不变量：生成数据规模、Redis 基数、内存下限、访问分布和缓解效果。
