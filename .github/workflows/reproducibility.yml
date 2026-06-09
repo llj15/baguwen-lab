@@ -5,8 +5,11 @@ on:
   push:
 
 jobs:
-  compose:
+  redis-cache-failure:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/redis-cache-failure
     steps:
       - uses: actions/checkout@v5
 
@@ -15,11 +18,11 @@ jobs:
 
       - name: Run experiment and analysis outside tracked results
         run: |
-          RESULTS_DIR="${RUNNER_TEMP}/redis-cache-demo-results" bash ./run.sh
+          RESULTS_DIR="${RUNNER_TEMP}/redis-cache-failure-results" bash ./run.sh
 
       - name: Verify generated artifacts
         run: |
-          RESULTS_DIR="${RUNNER_TEMP}/redis-cache-demo-results"
+          RESULTS_DIR="${RUNNER_TEMP}/redis-cache-failure-results"
           python scripts/verify_results.py "${RESULTS_DIR}/results.json"
           test -s "${RESULTS_DIR}/results.json"
           test -s "${RESULTS_DIR}/report.md"

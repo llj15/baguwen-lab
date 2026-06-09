@@ -11,8 +11,10 @@ __pycache__/
 .venv/
 venv/
 
-/tmp-results/
+tmp-results/
+**/tmp-results/
 /.env
+**/.env
 /bin/
 /dist/
 coverage.out

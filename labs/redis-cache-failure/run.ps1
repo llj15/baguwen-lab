@@ -40,7 +40,12 @@ try {
     Write-Host "Results directory: $ResultsDir"
 
     Write-Host "`n[1/4] Cleaning previous compose containers..."
-    Invoke-Compose @("down", "--remove-orphans")
+    try {
+        Invoke-Compose @("down", "--remove-orphans")
+    }
+    catch {
+        Write-Warning $_
+    }
 
     Write-Host "`n[2/4] Building and running experiment..."
     $env:RESULTS_DIR = $ResultsDir
