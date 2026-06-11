@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="410.0" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1d2528">Partition max/min ratio</text>
+<text x="24" y="193.0" transform="rotate(-90 24 193.0)" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#455">max/min partition count</text>
+<line x1="90" y1="324" x2="790" y2="324" stroke="#344" stroke-width="1"/>
+<line x1="90" y1="62" x2="90" y2="324" stroke="#344" stroke-width="1"/>
+<rect x="90.0" y="304.2" width="214.7" height="19.8" fill="#2f6f73"/>
+<text x="197.3" y="296.2" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d2528">1.00</text>
+<text x="197.3" y="362" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d2528">round-robin</text>
+<rect x="332.7" y="284.6" width="214.7" height="39.4" fill="#c45131"/>
+<text x="440.0" y="276.6" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d2528">1.99</text>
+<text x="440.0" y="362" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d2528">repo key</text>
+<rect x="575.3" y="62.0" width="214.7" height="262.0" fill="#7567a8"/>
+<text x="682.7" y="54.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d2528">13.20</text>
+<text x="682.7" y="362" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1d2528">actor key</text>
+</svg>

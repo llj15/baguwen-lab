@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "lab": "kafka-demo",
+  "generated_at": "2026-06-11T16:16:22Z",
+  "dataset": {
+    "url": "https://data.gharchive.org/2024-01-01-0.json.gz",
+    "md5": "d4bd9ce833f217e95ffb3fd958138827",
+    "compressed_bytes": 74527660,
+    "event_count": 153619,
+    "distinct_event_types": 15,
+    "distinct_repos": 59010,
+    "distinct_actors": 18973,
+    "first_created_at": "2024-01-01T00:00:00Z",
+    "last_created_at": "2024-01-01T00:59:59Z",
+    "top_event_types": [
+      {
+        "name": "PushEvent",
+        "count": 110370
+      },
+      {
+        "name": "CreateEvent",
+        "count": 12107
+      },
+      {
+        "name": "PullRequestEvent",
+        "count": 9613
+      },
+      {
+        "name": "IssueCommentEvent",
+        "count": 7161
+      },
+      {
+        "name": "IssuesEvent",
+        "count": 3964
+      },
+      {
+        "name": "DeleteEvent",
+        "count": 3408
+      },
+      {
+        "name": "WatchEvent",
+        "count": 3400
+      },
+      {
+        "name": "PullRequestReviewEvent",
+        "count": 1108
+      }
+    ],
+    "top_repos": [
+      {
+        "name": "dim12512a/Repo8",
+        "count": 3514
+      },
+      {
+        "name": "appref5555ix63/Repo4",
+        "count": 3497
+      },
+      {
+        "name": "dim12512a/Repo5",
+        "count": 3482
+      },
+      {
+        "name": "appref5555ix63/Repo3",
+        "count": 3478
+      },
+      {
+        "name": "dim12512a/Repo6",
+        "count": 3473
+      },
+      {
+        "name": "lu146enza/Repo9",
+        "count": 3472
+      },
+      {
+        "name": "appref5555ix63/Repo2",
+        "count": 3462
+      },
+      {
+        "name": "dim12512a/Repo7",
+        "count": 3434
+      }
+    ],
+    "top_actors": [
+      {
+        "name": "github-actions[bot]",
+        "count": 41916
+      },
+      {
+        "name": "dim12512a",
+        "count": 13903
+      },
+      {
+        "name": "appref5555ix63",
+        "count": 13650
+      },
+      {
+        "name": "dependabot[bot]",
+        "count": 7117
+      },
+      {
+        "name": "renovate[bot]",
+        "count": 4874
+      },
+      {
+        "name": "mend-bolt-for-github[bot]",
+        "count": 4659
+      },
+      {
+        "name": "lu146enza",
+        "count": 3472
+      },
+      {
+        "name": "mdmaid69",
+        "count": 1698
+      }
+    ],
+    "required_fields_ok": true
+  },
+  "kafka": {
+    "broker_image": "docker.io/apache/kafka:3.9.1@sha256:4ceccc577f03f51f6af8dbfda55194d0d892f4fa7913ffbded567ce3895622ed",
+    "partitions": 12,
+    "topics": [
+      "gh-events-rr",
+      "gh-events-by-repo",
+      "gh-events-by-actor",
+      "gh-events-consumer-group-*"
+    ]
+  },
+  "experiments": [
+    {
+      "name": "production",
+      "scenarios": [
+        {
+          "name": "round_robin",
+          "metrics": {
+            "topic": "gh-events-rr",
+            "records": 153619,
+            "duration_ms": 9801,
+            "records_per_second": 15673.484473350465
+          }
+        },
+        {
+          "name": "repo_keyed",
+          "metrics": {
+            "topic": "gh-events-by-repo",
+            "records": 153619,
+            "duration_ms": 9007,
+            "records_per_second": 17054.5093461369
+          }
+        },
+        {
+          "name": "actor_keyed",
+          "metrics": {
+            "topic": "gh-events-by-actor",
+            "records": 153619,
+            "duration_ms": 8867,
+            "records_per_second": 17324.055309144882
+          }
+        }
+      ]
+    },
+    {
+      "name": "partitioning_and_ordering",
+      "scenarios": [
+        {
+          "name": "round_robin",
+          "metrics": {
+            "topic": "gh-events-rr",
+            "records": 153619,
+            "duration_ms": 6908,
+            "records_per_second": 22235.74456936962,
+            "partitions_used": 12,
+            "partition_counts": [
+              12802,
+              12802,
+              12802,
+              12802,
+              12802,
+              12802,
+              12802,
+              12801,
+              12801,
+              12801,
+              12801,
+              12801
+            ],
+            "min_partition_count": 12801,
+            "max_partition_count": 12802,
+            "max_min_ratio": 1.0000781188969612,
+            "top_partition_share": 0.08333604567143388,
+            "key_partition_violations": 0,
+            "per_key_order_violations": 0,
+            "unique_keys": 0,
+            "initial_lag_records": 153619,
+            "checkpoint_consumed": 5000,
+            "checkpoint_lag_records": 148619,
+            "final_lag_records": 0
+          }
+        },
+        {
+          "name": "repo_keyed",
+          "metrics": {
+            "topic": "gh-events-by-repo",
+            "records": 153619,
+            "duration_ms": 2117,
+            "records_per_second": 72541.37331629188,
+            "partitions_used": 12,
+            "partition_counts": [
+              12851,
+              8764,
+              13327,
+              12658,
+              16931,
+              13171,
+              17405,
+              9592,
+              13169,
+              12716,
+              13985,
+              9050
+            ],
+            "min_partition_count": 8764,
+            "max_partition_count": 17405,
+            "max_min_ratio": 1.9859653126426289,
+            "top_partition_share": 0.11329978713570588,
+            "key_partition_violations": 0,
+            "per_key_order_violations": 0,
+            "unique_keys": 59125,
+            "initial_lag_records": 153619,
+            "checkpoint_consumed": 5000,
+            "checkpoint_lag_records": 148619,
+            "final_lag_records": 0
+          }
+        },
+        {
+          "name": "actor_keyed",
+          "metrics": {
+            "topic": "gh-events-by-actor",
+            "records": 153619,
+            "duration_ms": 2178,
+            "records_per_second": 70502.61736727475,
+            "partitions_used": 12,
+            "partition_counts": [
+              19096,
+              5389,
+              9687,
+              4894,
+              6248,
+              11542,
+              5356,
+              4584,
+              9572,
+              60528,
+              11825,
+              4898
+            ],
+            "min_partition_count": 4584,
+            "max_partition_count": 60528,
+            "max_min_ratio": 13.204188481675393,
+            "top_partition_share": 0.3940137613185869,
+            "key_partition_violations": 0,
+            "per_key_order_violations": 0,
+            "unique_keys": 18972,
+            "initial_lag_records": 153619,
+            "checkpoint_consumed": 5000,
+            "checkpoint_lag_records": 148619,
+            "final_lag_records": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "consumer_group_parallelism",
+      "scenarios": [
+        {
+          "name": "1_consumers",
+          "metrics": {
+            "requested_consumers": 1,
+            "active_consumers": 1,
+            "partition_count": 12,
+            "records": 1200,
+            "consumer_counts": [
+              1200
+            ],
+            "duration_ms": 7493
+          }
+        },
+        {
+          "name": "3_consumers",
+          "metrics": {
+            "requested_consumers": 3,
+            "active_consumers": 3,
+            "partition_count": 12,
+            "records": 1200,
+            "consumer_counts": [
+              400,
+              400,
+              400
+            ],
+            "duration_ms": 6012
+          }
+        },
+        {
+          "name": "6_consumers",
+          "metrics": {
+            "requested_consumers": 6,
+            "active_consumers": 6,
+            "partition_count": 12,
+            "records": 1200,
+            "consumer_counts": [
+              200,
+              200,
+              200,
+              200,
+              200,
+              200
+            ],
+            "duration_ms": 5674
+          }
+        },
+        {
+          "name": "12_consumers",
+          "metrics": {
+            "requested_consumers": 12,
+            "active_consumers": 12,
+            "partition_count": 12,
+            "records": 1200,
+            "consumer_counts": [
+              100,
+              100,
+              100,
+              100,
+              100,
+              100,
+              100,
+              100,
+              100,
+              100,
+              100,
+              100
+            ],
+            "duration_ms": 5534
+          }
+        },
+        {
+          "name": "16_consumers",
+          "metrics": {
+            "requested_consumers": 16,
+            "active_consumers": 12,
+            "partition_count": 12,
+            "records": 1200,
+            "consumer_counts": [
+              100,
+              100,
+              100,
+              100,
+              0,
+              100,
+              0,
+              0,
+              100,
+              100,
+              0,
+              100,
+              100,
+              100,
+              100,
+              100
+            ],
+            "duration_ms": 5525
+          }
+        }
+      ]
+    },
+    {
+      "name": "consumer_lag_drain",
+      "scenarios": [
+        {
+          "name": "repo_keyed_backlog",
+          "metrics": {
+            "checkpoint_consumed": 5000,
+            "checkpoint_lag_records": 148619,
+            "final_lag_records": 0,
+            "initial_lag_records": 153619
+          }
+        }
+      ]
+    }
+  ]
+}

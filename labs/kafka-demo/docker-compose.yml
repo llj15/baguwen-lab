@@ -1,0 +1,78 @@
+name: kafka-demo-lab
+
+x-build-args: &build-args
+  GO_IMAGE: ${GO_IMAGE:-docker.io/library/golang:1.24.5-alpine3.22@sha256:daae04ebad0c21149979cd8e9db38f565ecefd8547cf4a591240dc1972cf1399}
+  RUNTIME_IMAGE: ${RUNTIME_IMAGE:-docker.io/library/alpine:3.22@sha256:310c62b5e7ca5b08167e4384c68db0fd2905dd9c7493756d356e893909057601}
+  PYTHON_IMAGE: ${PYTHON_IMAGE:-docker.io/library/python:3.12.11-slim-bookworm@sha256:519591d6871b7bc437060736b9f7456b8731f1499a57e22e6c285135ae657bf7}
+
+x-common: &common
+  platform: ${DOCKER_PLATFORM:-linux/amd64}
+  restart: "no"
+
+services:
+  kafka:
+    <<: *common
+    image: ${KAFKA_IMAGE:-docker.io/apache/kafka:3.9.1@sha256:4ceccc577f03f51f6af8dbfda55194d0d892f4fa7913ffbded567ce3895622ed}
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_NUM_PARTITIONS: 12
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "127.0.0.1:9092", "--list"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+
+  experiment:
+    <<: *common
+    image: kafka-demo-lab-experiment:${IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: experiment
+      args: *build-args
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      OUTPUT_DIR: /data
+      TZ: UTC
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    volumes:
+      - type: bind
+        source: ${RESULTS_DIR:-./results}
+        target: /data
+
+  analysis:
+    <<: *common
+    image: kafka-demo-lab-analysis:${IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: analysis
+      args: *build-args
+    depends_on:
+      experiment:
+        condition: service_completed_successfully
+    environment:
+      OUTPUT_DIR: /data
+      TZ: UTC
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    volumes:
+      - type: bind
+        source: ${RESULTS_DIR:-./results}
+        target: /data
