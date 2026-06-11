@@ -21,6 +21,7 @@ Labs:
   redis-cache-failure       Cache penetration, breakdown, avalanche
   redis-distributed-lock    SET NX EX, Redlock, watchdog renewal
   redis-big-hot-key         Big key and hot key detection/mitigation
+  kafka-demo                Kafka partitioning, ordering, consumer groups, lag
 
 Aliases:
   cache                     redis-cache-failure
@@ -29,6 +30,8 @@ Aliases:
   big-hot                   redis-big-hot-key
   bigkey                    redis-big-hot-key
   hotkey                    redis-big-hot-key
+  kafka                     kafka-demo
+  kafka-real-events         kafka-demo
 
 Options:
   -ResultsDir DIR           Output directory. Relative paths resolve from repo root.
@@ -51,6 +54,9 @@ function Resolve-LabName {
         "bigkey" { "redis-big-hot-key"; return }
         "hotkey" { "redis-big-hot-key"; return }
         "redis-big-hot-key" { "redis-big-hot-key"; return }
+        "kafka" { "kafka-demo"; return }
+        "kafka-demo" { "kafka-demo"; return }
+        "kafka-real-events" { "kafka-demo"; return }
         default { throw "Unknown lab: $Name" }
     }
 }
@@ -64,6 +70,7 @@ if ($List) {
     "redis-cache-failure"
     "redis-distributed-lock"
     "redis-big-hot-key"
+    "kafka-demo"
     exit 0
 }
 

@@ -16,6 +16,7 @@ Hands-on labs for learning classic backend interview topics by running reproduci
 | [Redis Cache Failure](labs/redis-cache-failure/) | Cache penetration, cache breakdown, cache avalanche | Ready |
 | [Redis Distributed Lock](labs/redis-distributed-lock/) | SET NX EX, Redlock, watchdog renewal | Ready |
 | [Redis Big/Hot Key](labs/redis-big-hot-key/) | Big key detection, split mitigation, hot key skew, read-copy sharding | Ready |
+| [Kafka Demo](labs/kafka-demo/) | Partitioning, ordering, consumer groups, lag | Ready |
 
 ## Run A Lab
 
@@ -39,6 +40,7 @@ Windows PowerShell:
 ./scripts/run-lab.sh redis-cache-failure
 ./scripts/run-lab.sh redis-distributed-lock
 ./scripts/run-lab.sh redis-big-hot-key
+./scripts/run-lab.sh kafka-demo
 ```
 
 Prerequisite: Docker Desktop for Mac with Compose support.
@@ -49,6 +51,7 @@ Prerequisite: Docker Desktop for Mac with Compose support.
 ./scripts/run-lab.sh redis-cache-failure
 ./scripts/run-lab.sh redis-distributed-lock
 ./scripts/run-lab.sh redis-big-hot-key
+./scripts/run-lab.sh kafka-demo
 ```
 
 Prerequisite: Docker Engine with the Compose plugin. If Docker requires sudo on your machine, run with your normal Docker group setup or pass a Compose wrapper:
@@ -63,6 +66,7 @@ Prerequisite: Docker Engine with the Compose plugin. If Docker requires sudo on 
 .\scripts\run-lab.ps1 redis-cache-failure
 .\scripts\run-lab.ps1 redis-distributed-lock
 .\scripts\run-lab.ps1 redis-big-hot-key
+.\scripts\run-lab.ps1 kafka-demo
 ```
 
 Prerequisite: Docker Desktop for Windows with Linux containers enabled.
@@ -70,6 +74,8 @@ Prerequisite: Docker Desktop for Windows with Linux containers enabled.
 By default, generated files go to `tmp-results/<lab>` at the repository root. Override that with `--results-dir` on macOS/Linux or `-ResultsDir` on Windows.
 
 Aliases for the Redis Big/Hot Key lab: `big-hot`, `bigkey`, and `hotkey`.
+
+Aliases for the Kafka Demo lab: `kafka` and `kafka-real-events`.
 
 ## Monorepo Layout
 
@@ -87,6 +93,9 @@ Aliases for the Redis Big/Hot Key lab: `big-hot`, `bigkey`, and `hotkey`.
 |   |-- redis-big-hot-key/
 |   |   |-- docker-compose.yml
 |   |   |-- conf/
+|   |   |-- scripts/
+|   |   `-- results/
+|   |-- kafka-demo/
 |   |   |-- scripts/
 |   |   `-- results/
 |   `-- redis-distributed-lock/
